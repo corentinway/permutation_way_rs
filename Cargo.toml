@@ -1,0 +1,6 @@
+[package]
+name = "permutation_way"
+version = "0.1.0"
+authors = ["Corentin Jechoux <cjechoux@algofi.fr>"]
+
+[dependencies]

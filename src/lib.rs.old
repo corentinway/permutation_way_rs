@@ -1,0 +1,205 @@
+#[derive(PartialEq, PartialOrd, Debug)]
+enum Mobility {
+    Left,
+    Right,
+    NotMobile
+}
+
+fn create_directions( input : & Vec<i32> ) -> Vec<Mobility> {
+    // all input elements are mobile leftward
+    let mut directions: Vec<Mobility> = input.iter().map( |_| Mobility::Left).collect();
+    // the first one is not mobile
+    directions[0] = Mobility::NotMobile;
+
+    directions
+}
+
+pub fn permute( input : Vec<i32> ) -> Vec<Vec<i32>> {
+
+    let mut input: Vec<i32> = input;
+    input.sort();
+
+    // all input elements are mobile leftward
+    let mut directions: Vec<Mobility> = create_directions( &input );
+
+    let mut res = Vec::new();
+    res.push( input.clone() );
+
+
+    loop {
+
+        // while there is a mobile integer
+        let has_mobile = has_mobile_elements(&input, &directions);
+        if  has_mobile  {
+            // find the largest mobile integer
+            let largest = find_largest_mobile_element(&input, &directions);
+            let mobile_position = largest.1;
+            let direction = largest.0;
+
+            if mobile_position == 0 {
+                break;
+            } else {
+
+                if direction == &Mobility::Left {
+                    // swap elements
+                    input.swap( mobile_position - 1, mobile_position );
+                    // swap directions
+                    directions.swap( mobile_position - 1, mobile_position );
+                    res.push( input.clone() );
+
+                    // new position of the choosen element (after swap)
+                    let choosen_element_position = mobile_position - 1;
+
+                    // if the element reach the 1st position, then its direction is set to "not mobile"
+                    if choosen_element_position == 0 {
+                        let mut element_direction = directions.get(choosen_element_position).unwrap();
+                        element_direction = &Mobility::NotMobile;
+                    }
+                    // if the next element (leftward) than the chosen element, then its direction is set to "not mobile"
+                    else if choosen_element_position >= 1 && input.get( choosen_element_position) > input.get( choosen_element_position - 1 ) {
+                        let mut element_direction = directions.get(choosen_element_position).unwrap();
+                        element_direction = &Mobility::NotMobile;
+                    }
+
+                    for index in 0..choosen_element_position {
+                        if input.get(index) > input.get( choosen_element_position ) {
+                            let mut direction = directions.get(index).unwrap();
+                            direction = &Mobility::Right;
+                        }
+                    }
+                    for index in choosen_element_position+1..input.len() {
+                        if input.get(index) > input.get( choosen_element_position ) {
+                            let mut direction = directions.get(index).unwrap();
+                            direction = &Mobility::Left;
+                        }
+                    }
+
+                } else if direction == &Mobility::Right {
+                    // swap elements
+                    input.swap( mobile_position, mobile_position + 1 );
+                    // swap directions
+                    directions.swap( mobile_position, mobile_position + 1 );
+                    res.push( input.clone() );
+
+                    // new position of the choosen element (after swap)
+                    let choosen_element_position = mobile_position + 1;
+
+                    // if the element reach the last position, then its directions is set to "not mobile"
+                    if choosen_element_position == input.len() - 1 {
+                        let mut element_direction = directions.get( choosen_element_position ).unwrap();
+                        element_direction = &Mobility::NotMobile;
+                    }
+                    // if the next element (righttward) than the chosen element, then its direction is set to "not mobile"
+                    else if choosen_element_position < input.len() - 1 && input.get( choosen_element_position) > input.get( choosen_element_position + 1 ) {
+                        let mut element_direction = directions.get(0).unwrap();
+                        element_direction = &Mobility::NotMobile;
+                    }
+
+
+                    for index in 0..choosen_element_position {
+                        if input.get(index) > input.get( choosen_element_position ) {
+                            let mut direction = directions.get(index).unwrap();
+                            direction = &Mobility::Right;
+                        }
+                    }
+                    for index in choosen_element_position+1..input.len() {
+                        if input.get(index) > input.get( choosen_element_position ) {
+                            let mut direction = directions.get(index).unwrap();
+                            direction = &Mobility::Left;
+                        }
+                    }
+
+                }
+
+                // all elements greater than the choosen element have their directions set to RIGHT or LEFT
+                // according to whether they are between the choosen element and the start or the end of the permutation
+                // respectively
+            }
+
+        } else {
+            break;
+        }
+    }
+
+
+
+
+    res
+}
+
+fn has_mobile_elements( input: &Vec<i32>, directions: &Vec<Mobility>) -> bool {
+    let not_mobile_elements : Vec<_> = directions.iter().filter(|x| *x == &Mobility::NotMobile).collect();
+    let has_mobile: bool = not_mobile_elements.len() == input.len();
+    has_mobile
+}
+
+
+
+
+fn find_largest_mobile_element<'a>( input: &Vec<i32>, directions : &'a Vec<Mobility> ) -> (&'a Mobility, usize) {
+
+    if input.len() == 0 {
+        return (&Mobility::NotMobile, 0);
+    }
+
+    let mut mobile_position : usize = 0;
+    let mut max_value = input.get(mobile_position ).unwrap();
+    let mut max_direction : &Mobility = directions.get(mobile_position ).unwrap().clone();
+
+    for index in 1..input.len()-1 {
+        let is_mobile = directions.get(index).unwrap() != &Mobility::NotMobile;
+        let current_value = input.get(index).unwrap();
+        if is_mobile && current_value > max_value {
+            max_value = current_value;
+            mobile_position = index;
+            max_direction = directions.get(index).unwrap().clone();
+        }
+    }
+
+    let max_direction = max_direction;
+
+    (max_direction, mobile_position )
+
+
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::permute;
+    use super::find_largest_mobile_element;
+    use super::Mobility::{NotMobile, Left, Right};
+
+    #[test]
+    fn should_permute_an_arrey_of_length_3() {
+        // input
+        let input = vec![1, 2, 3];
+        // call
+        let actual = permute( input );
+        // assertions
+        assert_eq!( 6, actual.len() );
+    }
+
+    #[test]
+    fn should_return_not_mobile_and_zero_index_given_an_empty_array() {
+        // input
+        let input = vec![];
+        let direction = vec![];
+        // call
+        let actual = find_largest_mobile_element( &input, &direction );
+        // assertions
+        assert_eq!( actual.0, &NotMobile );
+        assert_eq!( actual.1, 0 );
+    }
+    #[test]
+    fn should_find_the_mobile_element_given_a_sized_1_vector() {
+        // input
+        let input = vec![ 1 ];
+        let direction = vec![ Left];
+        // call
+        let actual = find_largest_mobile_element( &input, &direction );
+        // assertions
+        assert_eq!( actual.0, &Left );
+        assert_eq!( actual.1, 1 );
+    }
+}
