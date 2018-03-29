@@ -1,23 +1,14 @@
-#[derive(PartialEq, PartialOrd, Debug)]
-enum Mobility {
-    #[warn(dead_code)]
-    Left,
-    #[warn(dead_code)]
-    Right,
-    #[warn(dead_code)]
-    NotMobile
-}
 
-use Mobility::*;
 
-fn create_directions( input : & Vec<i32> ) -> Vec<Mobility> {
-    // all input elements are mobile leftward
-    let mut directions: Vec<Mobility> = input.iter().map( |_| Mobility::Left).collect();
-    // the first one is not mobile
-    directions[0] = Mobility::NotMobile;
+mod mobility;
+mod utils;
 
-    directions
-}
+use mobility::Mobility;
+use mobility::Mobility::*;
+use mobility::create_directions;
+
+use utils::print_permutation;
+use utils::find_largest_mobile_element;
 
 pub fn permute( input : Vec<i32> ) -> Vec<Vec<i32>> {
     let mut res = Vec::new();
@@ -28,56 +19,69 @@ pub fn permute( input : Vec<i32> ) -> Vec<Vec<i32>> {
     let mut directions = create_directions( &input );
 
     // push 1, -2, -3
-    println!(">first permutation {:?}", input);
+    print_permutation( &input, &directions );
     res.push( input.clone() );
 
+    // ////////////////////////////////////////////////////////
+
     let largest = find_largest_mobile_element(&input, &directions);
-    println!( "input      {:?}", input );
-    println!( "directions {:?}", directions );
-    println!( "largest    {:?} {}", largest.0, largest.1 );
+
+    println!("\tinput      {:?}", input);
+    println!("\tdirections {:?}", directions);
+    println!("\tlargest    {:?} {}", largest.0, largest.1);
     let direction = largest.0;
     let mobile_position = largest.1;
 
-    assert_eq!( &Left, direction );
-    assert_eq!( 2, mobile_position);
+    assert_eq!(Left, direction);
+    assert_eq!(2, mobile_position);
+    input.swap(mobile_position - 1, mobile_position);
+    directions.swap(mobile_position - 1, mobile_position);
+    res.push(input.clone());
+
+    reset_directions_after_left_swap(&input, &mut directions, mobile_position);
+    // 1, -3, -2
+    print_permutation(&input, &directions);
+    // ////////////////////////////////////////////////////////
+
+    let largest = find_largest_mobile_element(&input, &directions);
+    println!( "\tinput      {:?}", input );
+    println!( "\tdirections {:?}", directions );
+    println!( "\tlargest    {:?} {}", largest.0, largest.1 );
+    let direction = largest.0;
+    let mobile_position = largest.1;
+
+    assert_eq!( Left, direction );
+    assert_eq!( 1, mobile_position);
     input.swap( mobile_position - 1, mobile_position );
     directions.swap( mobile_position - 1, mobile_position );
+    res.push( input.clone() );
 
-
+    reset_directions_after_left_swap( &input, &mut directions, mobile_position );
+    // 3, 1, -2
+    print_permutation( &input, &directions );
 
     res
 }
 
 
-fn find_largest_mobile_element<'a>( input: &Vec<i32>, directions : &'a Vec<Mobility> ) -> (&'a Mobility, usize) {
 
-    if input.len() == 0 {
-        return (&Mobility::NotMobile, 0);
-    }
 
-    let mut mobile_position : usize = 0;
-    let mut max_value = input.get(mobile_position ).unwrap();
-    let mut max_direction : &Mobility = directions.get(mobile_position ).unwrap().clone();
+fn reset_directions_after_left_swap(input : & Vec<i32>, directions: & mut Vec<Mobility>, mobile_position: usize ) {
+    let position_after_swap = mobile_position - 1;
+    let is_first_element = position_after_swap == 0;
 
-    for index in 1..input.len() {
-        let is_mobile = directions.get(index).unwrap() != &Mobility::NotMobile;
-        let current_value = input.get(index).unwrap();
 
-        println!("----------------------------------------");
-        println!("   is mobile   {}", is_mobile);
-        println!("   current val {}", current_value);
-        println!("   max         {}", max_value);
-        println!("   index       {}", index);
+    if is_first_element ||
+        // if next element in the same direction is larger than the choosen one
+        input.get( position_after_swap -1 ) > input.get(position_after_swap ) {
 
-        if is_mobile && current_value > max_value {
-            max_value = current_value;
-            mobile_position = index;
-            max_direction = directions.get(index).unwrap().clone();
-            println!( "max found val={}, pos={}, dir={:?}", current_value, mobile_position, max_direction);
+        if let Some(element) = directions.get_mut( position_after_swap) {
+            *element = NotMobile;
         }
+
+        /*let mut element_direction = directions.get(position_after_swap).unwrap();
+        element_direction = &Mobility::NotMobile;*/
     }
 
-    let max_direction = max_direction;
 
-    (max_direction, mobile_position )
 }
