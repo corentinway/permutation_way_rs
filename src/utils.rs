@@ -31,8 +31,7 @@ pub fn print_permutation( input : &Vec<i32>, directions : &Vec<Mobility>) {
 
 }
 
-pub
-fn find_largest_mobile_element(input: &Vec<i32>, directions : &Vec<Mobility> ) -> (Mobility, usize) {
+pub fn find_largest_mobile_element(input: &Vec<i32>, directions : &Vec<Mobility> ) -> (Mobility, usize) {
 
     if input.len() == 0 {
         return (NotMobile, 0);
@@ -45,15 +44,16 @@ fn find_largest_mobile_element(input: &Vec<i32>, directions : &Vec<Mobility> ) -
     for index in 1..input.len() {
         let is_mobile = directions.get(index).unwrap() != &NotMobile;
         let current_value = input.get(index).unwrap();
-        /*
-        println!("----------------------------------------");
+
+        /*println!("----------------------------------------");
         println!("   is mobile   {}", is_mobile);
         println!("   current val {}", current_value);
         println!("   max         {}", max_value);
         println!("   index       {}", index);
+        println!("   mobility    {:?}", directions.get(index) );
         */
 
-        if is_mobile && current_value > max_value {
+        if max_direction == NotMobile || ( is_mobile && current_value > max_value ) {
             max_value = current_value;
             mobile_position = index;
             max_direction = directions.get(index).unwrap().clone();
