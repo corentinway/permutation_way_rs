@@ -2,10 +2,18 @@
 
 language: rust
 
-sudo: true
+sudo: required
 
-before_install:
-  - sudo apt-get update
+# run builds ffor all the supported trains
+rust:
+  - nightly
+  - beta
+  - stable
+  - 1.20.0
+
+matrix:
+  allow_failures:
+    - rust: nightly
 
 addons:
   apt:
@@ -22,12 +30,7 @@ dist: trusty
 os:
   - linux
 
-# run builds ffor all the supported trains
-rust:
-  - nightly
-  - beta
-  - stable
-  - 1.20.0
+
 
 # add clippy
 before_script:
@@ -45,7 +48,6 @@ script:
       if [[ "$TRAVIS_RUST_VERSION" == "nightly" && $CLIPPY ]]; then
         cargo clippy
       fi
-
 
 after_success:
   - |
