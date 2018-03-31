@@ -57,7 +57,7 @@ pub fn find_largest_mobile_element(input: &Vec<i32>, directions : &Vec<Mobility>
             max_value = current_value;
             mobile_position = index;
             max_direction = directions.get(index).unwrap().clone();
-            println!( "\tmax found val={}, pos={}, dir={:?}", current_value, mobile_position, max_direction);
+            //println!( "\tmax found val={}, pos={}, dir={:?}", current_value, mobile_position, max_direction);
         }
     }
 

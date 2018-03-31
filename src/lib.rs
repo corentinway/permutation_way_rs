@@ -22,6 +22,11 @@ pub fn permute( input : Vec<i32> ) -> Vec<Vec<i32>> {
     print_permutation( &input, &directions );
     res.push( input.clone() );
 
+    /*----------------------------
+
+
+
+
     // ////////////////////////////////////////////////////////
 
     let largest = find_largest_mobile_element(&input, &directions);
@@ -62,7 +67,7 @@ pub fn permute( input : Vec<i32> ) -> Vec<Vec<i32>> {
     print_permutation( &input, &directions );
 
 
-    // ////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     let largest = find_largest_mobile_element(&input, &directions);
     println!( "\tinput      {:?}", input );
@@ -129,6 +134,27 @@ pub fn permute( input : Vec<i32> ) -> Vec<Vec<i32>> {
 
     assert_eq!( NotMobile, direction );
     assert_eq!( 0, 2);
+
+
+    -------------*/
+
+
+    loop {
+        let largest = find_largest_mobile_element(&input, &directions);
+        let direction = largest.0;
+        let mobile_position = largest.1;
+
+        if direction == NotMobile {
+            break;
+        }
+        direction.swap_input( &mut input, mobile_position );
+        direction.swap_directions( &mut directions, mobile_position);
+        res.push( input.clone() );
+
+        direction.reset( &input, &mut directions, mobile_position );
+        //print_permutation( &input, &directions );
+    }
+
 
 
 
