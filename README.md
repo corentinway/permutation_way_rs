@@ -7,7 +7,7 @@ This is an implementation of the [Steinhaus Johnson Trotter algorithm with Even'
 This algorithm compute all permutations of a given input vector.
 
 Given a vector of `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]` we expect to have `3,628,800` permutations.
-They was found in `800.475710` milliseconds without any threads. The test with CPU Intel:copyright: Core(TM) i5 @ 6.30 GHz and 16 Gb of RAM
+They was found in `800.475710` milliseconds without any threads. The test with CPU Intel(R) Core(TM) i5 @ 6.30 GHz and 16 Gb of RAM
 
 
 The roadmap bellow suggest some path to make it faster again.
