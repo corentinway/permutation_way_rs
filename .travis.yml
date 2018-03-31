@@ -1,19 +1,32 @@
+# source https://medium.com/@Razican/continuous-integration-and-code-coverage-report-for-a-rust-project-5dfd4d68fbe5
+
 language: rust
 cache: cargo
 dist: trusty
 os:
   - linux
   - osx
-  - windows
 
 # run builds ffor all the supported trains
 rust:
   - nightly
   - beta
   - stable
-  - 1.1.0
+  - 1.2.0
+
+# add clippy
+before_script:
+  - |
+      if [[ "$TRAVIS_RUST_VERSION" == "nightly" ]]; then
+        ( ( cargo install clipy && export CLIPPY=true ) || export CLIPPY=false );
+      fi
+  - export PATH=$PATH:~/.cargo/bin
 
 # the main script
 script:
   - cargo build
   - cargo test
+  - |
+      if [[ "$TRAVIS_RUST_VERSION" == "nightly" && $CLIPPY ]]; then
+        cargo clippy
+      fi
