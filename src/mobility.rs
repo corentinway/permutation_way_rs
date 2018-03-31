@@ -91,3 +91,22 @@ pub fn create_directions( input : & Vec<i32> ) -> Vec<Mobility> {
 
     directions
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn should_create_initial_direction_vec_with_the_same_len_og_the_given_input_vec() {
+        // input
+        let input = vec![1, 2, 3];
+        // call
+        let directions = create_directions(&input);
+        // assertions
+        assert_eq!(3, directions.len());
+        assert_eq!(Some(&NotMobile), directions.get(0));
+        assert_eq!(Some(&Left), directions.get(1));
+        assert_eq!(Some(&Left), directions.get(2));
+    }
+}
