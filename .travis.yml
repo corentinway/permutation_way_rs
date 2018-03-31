@@ -4,13 +4,14 @@ dist: trusty
 os:
   - linux
   - osx
+  - windows
 
 # run builds ffor all the supported trains
 rust:
   - nightly
   - beta
   - stable
-  - 1.0.0
+  - 1.1.0
 
 # the main script
 script:
