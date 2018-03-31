@@ -21,7 +21,6 @@ cache: cargo
 dist: trusty
 os:
   - linux
-  - osx
 
 # run builds ffor all the supported trains
 rust:
