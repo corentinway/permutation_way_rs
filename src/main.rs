@@ -18,8 +18,15 @@ fn main() {
 
     let end = Instant::now();
 
+
     println!("Execution time = {:?}", end.duration_since(start));
-    println!("Permutation found {}", permutations.len() );
+
+    match permutations {
+        Ok(permutations) => println!("Permutation found {}", permutations.len() ),
+        Err(message) => println!("Found exception of mobility saying: {}", message),
+    }
+
+
 
 
 
