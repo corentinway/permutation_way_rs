@@ -23,7 +23,6 @@ addons:
       - libdw-dev
       - cmake
       - gcc
-      - libbfd-dev
       - binutils-dev
 
 cache: cargo
