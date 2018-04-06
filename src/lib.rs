@@ -11,6 +11,8 @@ use mobility::create_directions;
 
 use utils::print_permutation;
 use utils::find_largest_mobile_element;
+use utils::Largest;
+
 
 /// find all permutations of the given `input` vector.
 ///
@@ -35,6 +37,11 @@ use utils::find_largest_mobile_element;
 /// ]), permutations );
 /// ```
 pub fn permute( input : Vec<i32> ) -> Result<Vec<Vec<i32>>, String> {
+
+    if input.is_empty() {
+        return Err( String::from("Cannot find permutation on empty vec") );
+    }
+
     let mut res = Vec::new();
 
     let mut input = input;
@@ -48,13 +55,18 @@ pub fn permute( input : Vec<i32> ) -> Result<Vec<Vec<i32>>, String> {
 
     loop {
         let largest = find_largest_mobile_element(&input, &directions);
-        let direction = largest.0;
-        let mobile_position = largest.1;
+        let direction = largest.direction;
+        let mobile_position = largest.position;
 
         if direction == NotMobile {
             break;
         }
-        direction.swap( &mut input, &mut directions, mobile_position );
+
+        let swap_result = direction.swap( &mut input, &mut directions, mobile_position );
+
+        if let Err( SwapError(position)) = swap_result {
+            return Err(format!("swap permutation error at position {}", position));
+        }
         res.push( input.clone() );
 
 
@@ -64,7 +76,7 @@ pub fn permute( input : Vec<i32> ) -> Result<Vec<Vec<i32>>, String> {
             return Err(format!("swap permutation error at position {}", position));
         }
         if let Err(ResetError(position)) = reset_result {
-            return Err(format!("reset permutation error at position {}", position));
+            return Err(format!( "reset permutation error at position {}", position));
         }
         //print_permutation( &input, &directions );
     }

@@ -150,6 +150,19 @@ mod tests {
     }
 
     #[test]
+    fn should_swap_mobility_to_right() {
+        // input
+        let mut input = vec![1, 2, 3];
+        let mut directions = vec![Right, NotMobile, NotMobile];
+        let mobile_position = 0;
+        // call
+        Right.swap(&mut input, &mut directions, mobile_position);
+        // assertions
+        assert_eq!( vec![2, 1, 3], input );
+        assert_eq!( vec![NotMobile, Right, NotMobile], directions );
+    }
+
+    #[test]
     fn should_not_swap_leftward_the_first_element() {
         // input
         let mut input = vec![1, 2, 3];
