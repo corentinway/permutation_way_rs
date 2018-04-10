@@ -109,6 +109,12 @@ impl Mobility {
 
 
 pub fn create_directions( input : & Vec<i32> ) -> Vec<Mobility> {
+
+    if input.len() == 0 {
+        return vec![];
+    }
+
+
     // all input elements are mobile leftward
     let mut directions: Vec<Mobility> = input.iter().map( |_| Left).collect();
     // the first one is not mobile

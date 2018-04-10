@@ -24,20 +24,44 @@ impl PermutationIterator {
 
         let directions = create_directions( &input );
 
-        let mut engine = PermutationIterator{ input,
+        let mut iterator = PermutationIterator{ input,
             directions,
             counter: 0 };
 
-        engine.input.sort();
+        iterator.input.sort();
 
-        engine
+        iterator
     }
 }
+
+/// find all permutations of the given `input` vector.
+///
+/// # Example
+///
+/// ```
+///   use permutation_way::permute;
+///   // input
+///   let input = vec![1, 2, 3];
+///   // call
+///   let mut iterator = PermutationIterator::new( input );
+///   // assertions
+///   assert_eq!( Some( vec![1, 2, 3] ), iterator.next() );
+///   assert_eq!( Some( vec![1, 3, 2] ), iterator.next() );
+///   assert_eq!( Some( vec![3, 1, 2] ), iterator.next() );
+///   assert_eq!( Some( vec![3, 2, 1] ), iterator.next() );
+///   assert_eq!( Some( vec![2, 3, 1] ), iterator.next() );
+///   assert_eq!( Some( vec![2, 1, 3] ), iterator.next() );
+///   assert_eq!( None, iterator.next() );
+/// ```
 
 impl Iterator for PermutationIterator {
     type Item = Vec<i32>;
 
     fn next( &mut self ) -> Option<Self::Item> {
+
+        if self.input.len() == 0{
+            return None;
+        }
 
 
         if self.counter == 0 {
@@ -81,79 +105,3 @@ impl Iterator for PermutationIterator {
 
     }
 }
-
-
-
-/// find all permutations of the given `input` vector.
-///
-/// # Example
-///
-/// ```
-/// use permutation_way::permute;
-/// // input
-/// let input = vec![1, 2, 3];
-///
-/// // call
-/// let permutations = permute( input );
-///
-/// // assertions
-/// assert_eq!( Ok(vec![
-///     vec![1, 2, 3],
-///     vec![1, 3, 2],
-///     vec![3, 1, 2],
-///     vec![3, 2, 1],
-///     vec![2, 3, 1],
-///     vec![2, 1, 3]
-/// ]), permutations );
-/// ```
-pub fn permute( input : Vec<i32> ) -> Result<Vec<Vec<i32>>, String> {
-
-    if input.is_empty() {
-        return Err( String::from("Cannot find permutation on empty vec") );
-    }
-
-    let mut res = Vec::new();
-
-    let mut input = input;
-    input.sort();
-
-    let mut directions = create_directions( &input );
-
-    // push 1, -2, -3
-    print_permutation( &input, &directions );
-    res.push( input.clone() );
-
-    loop {
-        let largest = find_largest_mobile_element(&input, &directions);
-        let direction = largest.direction;
-        let mobile_position = largest.position;
-
-        if direction == NotMobile {
-            break;
-        }
-
-        let swap_result = direction.swap( &mut input, &mut directions, mobile_position );
-
-        if let Err( SwapError(position)) = swap_result {
-            return Err(format!("swap permutation error at position {}", position));
-        }
-        res.push( input.clone() );
-
-
-        let reset_result = direction.reset( &input, &mut directions, mobile_position );
-
-        if let Err(SwapError(position)) = reset_result {
-            return Err(format!("swap permutation error at position {}", position));
-        }
-        if let Err(ResetError(position)) = reset_result {
-            return Err(format!( "reset permutation error at position {}", position));
-        }
-        //print_permutation( &input, &directions );
-    }
-
-    Ok(res)
-}
-
-
-
-
