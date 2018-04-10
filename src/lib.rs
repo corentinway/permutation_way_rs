@@ -13,18 +13,18 @@ use utils::print_permutation;
 use utils::find_largest_mobile_element;
 
 
-pub struct PermutationEngine {
+pub struct PermutationIterator {
     input: Vec<i32>,
     directions: Vec<Mobility>,
     counter: u32,
 }
 
-impl PermutationEngine {
-    pub fn new( input : Vec<i32> ) -> PermutationEngine {
+impl PermutationIterator {
+    pub fn new( input : Vec<i32> ) -> PermutationIterator {
 
         let directions = create_directions( &input );
 
-        let mut engine = PermutationEngine{ input,
+        let mut engine = PermutationIterator{ input,
             directions,
             counter: 0 };
 
@@ -34,7 +34,7 @@ impl PermutationEngine {
     }
 }
 
-impl Iterator for PermutationEngine {
+impl Iterator for PermutationIterator {
     type Item = Vec<i32>;
 
     fn next( &mut self ) -> Option<Self::Item> {
