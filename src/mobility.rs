@@ -109,6 +109,11 @@ impl Mobility {
 
 
 pub fn create_directions( input : & Vec<i32> ) -> Vec<Mobility> {
+
+    if input.len() == 0 {
+        return vec![];
+    }
+
     // all input elements are mobile leftward
     let mut directions: Vec<Mobility> = input.iter().map( |_| Left).collect();
     // the first one is not mobile
@@ -147,6 +152,19 @@ mod tests {
         // assertions
         assert_eq!( vec![2, 1, 3], input );
         assert_eq!( vec![Left, NotMobile, Right], directions );
+    }
+
+    #[test]
+    fn should_swap_mobility_to_right() {
+        // input
+        let mut input = vec![1, 2, 3];
+        let mut directions = vec![Right, NotMobile, NotMobile];
+        let mobile_position = 0;
+        // call
+        Right.swap(&mut input, &mut directions, mobile_position);
+        // assertions
+        assert_eq!( vec![2, 1, 3], input );
+        assert_eq!( vec![NotMobile, Right, NotMobile], directions );
     }
 
     #[test]
