@@ -13,33 +13,12 @@ use utils::print_permutation;
 use utils::find_largest_mobile_element;
 
 
-pub struct PermutationIterator {
-    input: Vec<i32>,
-    directions: Vec<Mobility>,
-    counter: u32,
-}
-
-impl PermutationIterator {
-    pub fn new( input : Vec<i32> ) -> PermutationIterator {
-
-        let directions = create_directions( &input );
-
-        let mut iterator = PermutationIterator{ input,
-            directions,
-            counter: 0 };
-
-        iterator.input.sort();
-
-        iterator
-    }
-}
-
-/// find all permutations of the given `input` vector.
+/// An iterator to find all permutations of the given `input` vector.
 ///
 /// # Example
 ///
 /// ```
-///   use permutation_way::permute;
+/// use permutation_way::PermutationIterator;
 ///   // input
 ///   let input = vec![1, 2, 3];
 ///   // call
@@ -53,6 +32,36 @@ impl PermutationIterator {
 ///   assert_eq!( Some( vec![2, 1, 3] ), iterator.next() );
 ///   assert_eq!( None, iterator.next() );
 /// ```
+pub struct PermutationIterator {
+    input: Vec<i32>,
+    directions: Vec<Mobility>,
+    counter: u32,
+    result: Result<(), String>
+}
+
+impl PermutationIterator {
+
+    /// Return an instance of an `Iterator` that will provide
+    /// each permutation when `next` method is invoked
+    pub fn new( input : Vec<i32> ) -> PermutationIterator {
+
+        let directions = create_directions( &input );
+
+        let mut iterator = PermutationIterator{ input,
+            directions,
+            counter: 0, result: Ok(()) };
+
+        iterator.input.sort();
+
+        iterator
+    }
+
+    /// Return `false`if all permutations occurs well
+    pub fn has_errors( &self ) -> bool {
+        return self.result.is_err();
+    }
+}
+
 
 impl Iterator for PermutationIterator {
     type Item = Vec<i32>;
@@ -81,22 +90,27 @@ impl Iterator for PermutationIterator {
 
         let swap_result = direction.swap( &mut self.input, &mut self.directions, mobile_position );
 
-        /*if let Err( SwapError(position)) = swap_result {
-            return Err(format!("swap permutation error at position {}", position));
-        }*/
+        if let Err( SwapError(position)) = swap_result {
+            self.result = Err(format!("swap permutation error at position {}", position));
+            // stop the iterator
+            return None;
+        }
         let result = Some( self.input.clone() );
 
 
         let reset_result = direction.reset( &self.input, &mut self.directions, mobile_position );
 
-        /*if let Err(SwapError(position)) = reset_result {
-            return Err(format!("swap permutation error at position {}", position));
+        if let Err(SwapError(position)) = reset_result {
+            self.result = Err(format!("swap permutation error at position {}", position));
+            // stop the iterator
+            return None;
         }
         if let Err(ResetError(position)) = reset_result {
-            return Err(format!( "reset permutation error at position {}", position));
+            self.result = Err(format!( "reset permutation error at position {}", position));
+            // stop the iterator
+            return None;
         }
-        */
-        //print_permutation( &input, &directions );
+
 
 
         self.counter = self.counter + 1;

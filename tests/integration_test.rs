@@ -13,6 +13,7 @@ fn should_return_an_empty_vec_given_an_empty_array() {
 
     // assertions
     assert_eq!( None, iterator.next() );
+    assert_eq!( false, iterator.has_errors() );
 
 }
 
@@ -30,4 +31,6 @@ fn should_find_6_permutation_given_a_vec_of_3_elements_with_iterator() {
     assert_eq!( Some( vec![2, 3, 1] ), iterator.next() );
     assert_eq!( Some( vec![2, 1, 3] ), iterator.next() );
     assert_eq!( None, iterator.next() );
+    assert_eq!( false, iterator.has_errors() );
 }
+
