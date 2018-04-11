@@ -86,15 +86,6 @@ impl Iterator for PermutationIterator {
             return None;
         }
 
-        if self.input.len() == 2 {
-            if self.counter == 1 {
-                let mut perm = self.input.clone();
-                perm.reverse();
-                return Some( perm );
-            } else {
-                return None;
-            }
-        }
 
         let largest = find_largest_mobile_element(&self.input, &self.directions);
         let direction = largest.direction;
