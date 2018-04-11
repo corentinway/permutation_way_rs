@@ -33,9 +33,13 @@ use utils::find_largest_mobile_element;
 ///   assert_eq!( None, iterator.next() );
 /// ```
 pub struct PermutationIterator {
+    /// vec that should permute its elements
     input: Vec<i32>,
+    /// vec that holds mobility information of each element of the `input`array
     directions: Vec<Mobility>,
+    /// internal counter useful to emit the 1st array
     counter: u32,
+    /// result to check if some errors happened
     result: Result<(), String>
 }
 
@@ -77,6 +81,19 @@ impl Iterator for PermutationIterator {
             println!( "         COUNTER 0" );
             self.counter = self.counter + 1;
             return Some( self.input.clone() );
+        } else if self.input.len() == 1 {
+            // stop
+            return None;
+        }
+
+        if self.input.len() == 2 {
+            if self.counter == 1 {
+                let mut perm = self.input.clone();
+                perm.reverse();
+                return Some( perm );
+            } else {
+                return None;
+            }
         }
 
         let largest = find_largest_mobile_element(&self.input, &self.directions);
