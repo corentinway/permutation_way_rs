@@ -40,7 +40,9 @@ pub struct PermutationIterator {
     /// internal counter useful to emit the 1st array
     counter: u32,
     /// result to check if some errors happened
-    result: Result<(), String>
+    result: Result<(), String>,
+    /// maximum expected permutation. The iterator should return none if the maximum is reached
+    max: Option<u32>
 }
 
 impl PermutationIterator {
@@ -53,7 +55,10 @@ impl PermutationIterator {
 
         let mut iterator = PermutationIterator{ input,
             directions,
-            counter: 0, result: Ok(()) };
+            counter: 0, 
+            result: Ok(()),
+            max: None
+        };
 
         iterator.input.sort();
 
@@ -63,6 +68,28 @@ impl PermutationIterator {
     /// Return `false`if all permutations occurs well
     pub fn has_errors( &self ) -> bool {
         return self.result.is_err();
+    }
+
+    /// set the maximum permutation to comput
+    /// e
+    /// # Example
+    ///
+    /// ```
+    /// use permutation_way::PermutationIterator;
+    ///   // input
+    ///   let input = vec![1, 2, 3];
+    ///   // call
+    ///   let mut iterator = PermutationIterator::new( input );
+    ///   iterator.set_max( 3 ); 
+    ///   // assertions
+    ///   assert_eq!( Some( vec![1, 2, 3] ), iterator.next() );
+    ///   assert_eq!( Some( vec![1, 3, 2] ), iterator.next() );
+    ///   assert_eq!( Some( vec![3, 1, 2] ), iterator.next() );
+    ///   assert_eq!( None, iterator.next() );
+    ///   assert_eq!( false, iterator.has_errors() );
+    /// ```
+    pub fn set_max( &mut self, max : u32 ) {
+        self.max = Some(max);
     }
 }
 
@@ -77,8 +104,12 @@ impl Iterator for PermutationIterator {
         }
 
 
+        // check max is reach
+        if self.max == Some(self.counter) {
+            return None;
+        }
+
         if self.counter == 0 {
-            println!( "         COUNTER 0" );
             self.counter = self.counter + 1;
             return Some( self.input.clone() );
         } else if self.input.len() == 1 {
