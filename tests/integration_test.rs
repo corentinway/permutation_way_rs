@@ -23,7 +23,7 @@ fn should_return_a_maximum_of_3_permutations_given_a_vec_of_3_elements_and_a_thr
     let input = vec![1, 2, 3];
     // call
     let mut iterator = PermutationIterator::new( input );
-    iterator.set_max( 3 ); // TODO
+    iterator.set_max( 3 ); 
     // assertions
     assert_eq!( Some( vec![1, 2, 3] ), iterator.next() );
     assert_eq!( Some( vec![1, 3, 2] ), iterator.next() );
