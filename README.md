@@ -15,8 +15,6 @@ The roadmap bellow suggest some path to make it faster again.
 # Roadmap
 
 * use of generics : for the moment, the accepted input is an array of `i32`.
-* implementation of the `Iter` for the moment, the function returns once all permutation are found.
-Thanks to `Iter` trait the algorithm may use less memory based on the next usage for each permutation found
 * finally I will use threads to have it faster.
 
 I may had a `max` options in order to stop the computation of permutation. I may be a number of a function

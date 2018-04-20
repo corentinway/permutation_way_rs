@@ -9,13 +9,15 @@ pub struct Largest {
     pub position : usize
 }
 
-pub fn print_permutation( input : &Vec<i32>, directions : &Vec<Mobility>) {
+pub fn print_permutation<T>( input : &Vec<T>, directions : &Vec<Mobility>)
+    where T : Sized
+{
     assert_eq!(input.len(), directions.len());
     let mut str = String::new();
 
     for index in 0..input.len() {
 
-        let data : i32 = *input.get( index ).unwrap();
+        let data : T = *input.get( index ).unwrap();
         let data = data.to_string();
 
         match directions.get(index).unwrap() {
@@ -37,7 +39,9 @@ pub fn print_permutation( input : &Vec<i32>, directions : &Vec<Mobility>) {
 
 }
 
-pub fn find_largest_mobile_element(input: &Vec<i32>, directions : &Vec<Mobility> ) -> Largest {
+pub fn find_largest_mobile_element<T>(input: &Vec<T>, directions : &Vec<Mobility> ) -> Largest 
+    where T : PartialOrd
+{
 
     if input.len() == 0 {
         return Largest {

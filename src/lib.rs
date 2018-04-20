@@ -32,9 +32,9 @@ use utils::find_largest_mobile_element;
 ///   assert_eq!( Some( vec![2, 1, 3] ), iterator.next() );
 ///   assert_eq!( None, iterator.next() );
 /// ```
-pub struct PermutationIterator {
+pub struct PermutationIterator<T> {
     /// vec that should permute its elements
-    input: Vec<i32>,
+    input: Vec<T>,
     /// vec that holds mobility information of each element of the `input`array
     directions: Vec<Mobility>,
     /// internal counter useful to emit the 1st array
@@ -45,11 +45,13 @@ pub struct PermutationIterator {
     max: Option<u32>
 }
 
-impl PermutationIterator {
+impl<T> PermutationIterator<T> 
+    where T: PartialOrd + Ord 
+{
 
     /// Return an instance of an `Iterator` that will provide
     /// each permutation when `next` method is invoked
-    pub fn new( input : Vec<i32> ) -> PermutationIterator {
+    pub fn new( input : Vec<T> ) -> PermutationIterator<T> {
 
         let directions = create_directions( &input );
 
@@ -94,8 +96,10 @@ impl PermutationIterator {
 }
 
 
-impl Iterator for PermutationIterator {
-    type Item = Vec<i32>;
+impl<T> Iterator for PermutationIterator<T>
+    where T: PartialOrd
+{
+    type Item = Vec<T>;
 
     fn next( &mut self ) -> Option<Self::Item> {
 

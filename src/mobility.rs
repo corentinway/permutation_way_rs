@@ -21,7 +21,7 @@ use Mobility::*;
 
 impl Mobility {
 
-    pub fn swap( &self, input : &mut Vec<i32 >, directions : &mut Vec<Mobility>, mobile_position : usize) -> Result<(), MobilityError> {
+    pub fn swap<T>( &self, input : &mut Vec<T >, directions : &mut Vec<Mobility>, mobile_position : usize) -> Result<(), MobilityError> {
 
         match *self {
             Left => {
@@ -44,7 +44,9 @@ impl Mobility {
         Ok(())
     }
 
-    pub fn reset( &self, input : &Vec<i32>, directions : &mut Vec<Mobility>, mobile_position : usize) -> Result<(), MobilityError> {
+    pub fn reset<T>( &self, input : &Vec<T>, directions : &mut Vec<Mobility>, mobile_position : usize) -> Result<(), MobilityError> 
+        where T: PartialOrd
+    {
 
         let position_after_swap = self.get_position_after_swap(mobile_position)?;
 
@@ -88,7 +90,9 @@ impl Mobility {
 
 
 
-    fn get_next_element<'a>( &self, input: &'a Vec<i32>, position_after_swap : usize ) -> Result<Option<&'a i32>, MobilityError> {
+    fn get_next_element<'a, T>( &self, input: &'a Vec<T>, position_after_swap : usize ) -> Result<Option<&'a T>, MobilityError>
+        where T : PartialOrd
+    {
         match *self {
             Left => Ok(input.get(position_after_swap - 1)),
             Right => Ok(input.get( position_after_swap + 1)),
@@ -108,7 +112,7 @@ impl Mobility {
 
 
 
-pub fn create_directions( input : & Vec<i32> ) -> Vec<Mobility> {
+pub fn create_directions<T>( input : & Vec<T> ) -> Vec<Mobility> {
 
     if input.len() == 0 {
         return vec![];
