@@ -6,7 +6,7 @@ use permutation_way::PermutationIterator;
 fn should_return_an_empty_vec_given_an_empty_array() {
 
     // input
-    let input = vec![];
+    let input : Vec<i32> = vec![];
 
     // call
     let mut iterator = PermutationIterator::new( input );
@@ -74,4 +74,3 @@ fn should_find_2_permutation_given_a_vec_of_2_elements_with_iterator() {
     assert_eq!( None, iterator.next() );
     assert_eq!( false, iterator.has_errors() );
 }
-

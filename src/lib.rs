@@ -9,7 +9,7 @@ use mobility::Mobility::*;
 use mobility::MobilityError::*;
 use mobility::create_directions;
 
-use utils::print_permutation;
+//use utils::print_permutation;
 use utils::find_largest_mobile_element;
 
 
@@ -96,8 +96,9 @@ impl<T> PermutationIterator<T>
 }
 
 
+
 impl<T> Iterator for PermutationIterator<T>
-    where T: PartialOrd
+    where T: PartialOrd + Clone
 {
     type Item = Vec<T>;
 

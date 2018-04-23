@@ -10,14 +10,14 @@ pub struct Largest {
 }
 
 pub fn print_permutation<T>( input : &Vec<T>, directions : &Vec<Mobility>)
-    where T : Sized
+    where T : ToString + Clone
 {
     assert_eq!(input.len(), directions.len());
     let mut str = String::new();
 
     for index in 0..input.len() {
 
-        let data : T = *input.get( index ).unwrap();
+        let data : T = input.get( index ).unwrap().clone();
         let data = data.to_string();
 
         match directions.get(index).unwrap() {
@@ -93,8 +93,8 @@ mod tests {
     #[test]
     fn should_find_no_mobile_given_an_empty_input_array() {
         // input
-        let input = vec![];
-        let directions= vec![];
+        let input : Vec<i32> = vec![];
+        let directions = vec![];
         // call
         let actual_largest = find(&input, &directions);
         // asserts
