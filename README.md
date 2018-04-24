@@ -12,10 +12,19 @@ They was found in `800.475710` milliseconds without any threads. The test with C
 
 The roadmap bellow suggest some path to make it faster again.
 
+It permutes any type that implements the traits :
+* `Eq`, `Clone`
+* `Ord`, `PartialOrd`
+* and `PartialEq`
+
+
 # Roadmap
 
-* use of generics : for the moment, the accepted input is an array of `i32`.
-* finally I will use threads to have it faster.
+*  I will use threads to have it faster.
 
 I may had a `max` options in order to stop the computation of permutation. I may be a number of a function
 that test some conditions. An `interrupt` function may be added to stop the research of the next permutations.
+
+# Examples
+
+See integrations tests in the folder tests.
