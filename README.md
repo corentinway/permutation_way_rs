@@ -21,6 +21,7 @@ It permutes any type that implements the traits :
 # Roadmap
 
 *  I will use threads to have it faster.
+* do benchmarks
 
 I may had a `max` options in order to stop the computation of permutation. I may be a number of a function
 that test some conditions. An `interrupt` function may be added to stop the research of the next permutations.
