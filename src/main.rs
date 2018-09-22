@@ -3,38 +3,38 @@ extern crate permutation_way;
 
 use permutation_way::PermutationIterator;
 
-use std::time::Instant;
+use std::thread;
+use std::sync::mpsc;
+
 
 fn main() {
 
 
 
-    let input = vec![1, 2, 3];
+    let (transmitter, receiver) = mpsc::channel();
+
+    // thread that compute permutations;
+    let compute_handler = thread::spawn( move || {
+
+        // input
+        let input = vec![1, 2, 3];
+        // iterator
+        let iterator = PermutationIterator::new( input );
+
+        iterator.enumerate().for_each( move|permutation| 
+            // println!( "found {:?}", permutation );
+            transmitter.send( permutation ).unwrap()
+        );
+        
+    });
 
 
-    let start = Instant::now();
-
-    // call
-    let iterator = PermutationIterator::new( input );
-
-    for _val in iterator {
-        // do nothing
+    for permutation in receiver.iter() {
+        println!( "Got {:?}", permutation );
     }
 
-    let end = Instant::now();
 
-
-    println!("Execution time = {:?}", end.duration_since(start));
-
-
-    // input
-    let input = vec![1, 2, 3];
-    // call
-    let iterator = PermutationIterator::new( input );
-
-    for val in iterator {
-        println!( " value = {:?}", val );
-    }
+    compute_handler.join().unwrap();
 
 
 

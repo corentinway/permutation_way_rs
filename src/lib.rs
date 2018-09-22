@@ -163,3 +163,43 @@ impl<T> Iterator for PermutationIterator<T>
 
     }
 }
+
+
+pub struct PermutationIteratorThread {
+
+}
+
+use std::thread;
+
+#[derive(Debug, PartialEq)]
+pub enum PermutationIteratorEvent<T>
+{
+    Data( usize, Vec<T> ),
+    End,
+}
+
+use PermutationIteratorEvent::{Data, End};
+
+impl PermutationIteratorThread
+{
+     pub fn new<T, F>( input : Vec<T>, f : &'static mut F )
+        where 
+            T: 'static + PartialOrd + Ord + Clone + Send,
+            F: 'static + FnMut(PermutationIteratorEvent<T>) + Send
+    {
+
+        let iterator = PermutationIterator::new(input);
+
+        let computer_handler = thread::spawn( move || {
+
+            for (index, permutation) in iterator.enumerate() {
+                f( Data( index, permutation ) );
+            }
+                    
+            f( End )
+
+        });
+
+        computer_handler.join();
+     }
+}
