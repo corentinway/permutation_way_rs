@@ -165,6 +165,7 @@ impl<T> Iterator for PermutationIterator<T>
 }
 
 
+/*
 pub struct PermutationIteratorThread {
 
 }
@@ -203,3 +204,4 @@ impl PermutationIteratorThread
         computer_handler.join();
      }
 }
+*/
