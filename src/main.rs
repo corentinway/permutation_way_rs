@@ -28,14 +28,16 @@ fn main() {
 
 
 fn find_permutations<F>( input : Vec<i32>, callback : F ) 
-    where F : 'static + Fn(Vec<i32>) + Send  {
+    where F : 'static + Fn(Option<Vec<i32>>) + Send  {
 
     thread::spawn(move || {
        let iter = PermutationIterator::new( input );
 
         for permutation in iter {
-            callback( permutation );
+            callback( Some(permutation) );
         }
+
+        callback( None );
     });
 
 }
