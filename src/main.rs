@@ -3,10 +3,9 @@ extern crate permutation_way;
 
 use permutation_way::PermutationIterator;
 
-//use std::time::Instant;
-
 use std::thread;
 use std::sync::mpsc;
+use std::marker::Send;
 
 
 fn main() {
@@ -23,27 +22,21 @@ fn main() {
         println!("callback - {:?}", data );
     }  );
 
+    thread::sleep_ms( 10000 );
+
 }
 
 
 fn find_permutations<F>( input : Vec<i32>, callback : F ) 
-    where F : Fn(Vec<i32>)  {
-    let (tx, rx) = mpsc::channel();
+    where F : 'static + Fn(Vec<i32>) + Send  {
 
     thread::spawn(move || {
        let iter = PermutationIterator::new( input );
 
         for permutation in iter {
-            tx.send( permutation ).unwrap();
+            callback( permutation );
         }
     });
-
-    let iter = rx.iter();
-    let mut received_count = 0;
-    for received in iter {
-        received_count = received_count + 1;
-        callback( received );
-    }
 
 }
 
