@@ -4,14 +4,13 @@
 mod mobility;
 mod utils;
 
+use mobility::create_directions;
 use mobility::Mobility;
 use mobility::Mobility::*;
 use mobility::MobilityError::*;
-use mobility::create_directions;
 
 //use utils::print_permutation;
 use utils::find_largest_mobile_element;
-
 
 /// An iterator to find all permutations of the given `input` vector.
 ///
@@ -42,24 +41,24 @@ pub struct PermutationIterator<T> {
     /// result to check if some errors happened
     result: Result<(), String>,
     /// maximum expected permutation. The iterator should return none if the maximum is reached
-    max: Option<u32>
+    max: Option<u32>,
 }
 
-impl<T> PermutationIterator<T> 
-    where T: PartialOrd + Ord 
+impl<T> PermutationIterator<T>
+where
+    T: PartialOrd + Ord,
 {
-
     /// Return an instance of an `Iterator` that will provide
     /// each permutation when `next` method is invoked
-    pub fn new( input : Vec<T> ) -> PermutationIterator<T> {
+    pub fn new(input: Vec<T>) -> PermutationIterator<T> {
+        let directions = create_directions(&input);
 
-        let directions = create_directions( &input );
-
-        let mut iterator = PermutationIterator{ input,
+        let mut iterator = PermutationIterator {
+            input,
             directions,
-            counter: 0, 
+            counter: 0,
             result: Ok(()),
-            max: None
+            max: None,
         };
 
         iterator.input.sort();
@@ -68,7 +67,7 @@ impl<T> PermutationIterator<T>
     }
 
     /// Return `false`if all permutations occurs well
-    pub fn has_errors( &self ) -> bool {
+    pub fn has_errors(&self) -> bool {
         return self.result.is_err();
     }
 
@@ -82,7 +81,7 @@ impl<T> PermutationIterator<T>
     ///   let input = vec![1, 2, 3];
     ///   // call
     ///   let mut iterator = PermutationIterator::new( input );
-    ///   iterator.set_max( 3 ); 
+    ///   iterator.set_max( 3 );
     ///   // assertions
     ///   assert_eq!( Some( vec![1, 2, 3] ), iterator.next() );
     ///   assert_eq!( Some( vec![1, 3, 2] ), iterator.next() );
@@ -90,24 +89,21 @@ impl<T> PermutationIterator<T>
     ///   assert_eq!( None, iterator.next() );
     ///   assert_eq!( false, iterator.has_errors() );
     /// ```
-    pub fn set_max( &mut self, max : u32 ) {
+    pub fn set_max(&mut self, max: u32) {
         self.max = Some(max);
     }
 }
 
-
-
 impl<T> Iterator for PermutationIterator<T>
-    where T: PartialOrd + Clone
+where
+    T: PartialOrd + Clone,
 {
     type Item = Vec<T>;
 
-    fn next( &mut self ) -> Option<Self::Item> {
-
-        if self.input.len() == 0{
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.input.len() == 0 {
             return None;
         }
-
 
         // check max is reach
         if self.max == Some(self.counter) {
@@ -116,12 +112,11 @@ impl<T> Iterator for PermutationIterator<T>
 
         if self.counter == 0 {
             self.counter = self.counter + 1;
-            return Some( self.input.clone() );
+            return Some(self.input.clone());
         } else if self.input.len() == 1 {
             // stop
             return None;
         }
-
 
         let largest = find_largest_mobile_element(&self.input, &self.directions);
         let direction = largest.direction;
@@ -132,17 +127,16 @@ impl<T> Iterator for PermutationIterator<T>
             return None;
         }
 
-        let swap_result = direction.swap( &mut self.input, &mut self.directions, mobile_position );
+        let swap_result = direction.swap(&mut self.input, &mut self.directions, mobile_position);
 
-        if let Err( SwapError(position)) = swap_result {
+        if let Err(SwapError(position)) = swap_result {
             self.result = Err(format!("swap permutation error at position {}", position));
             // stop the iterator
             return None;
         }
-        let result = Some( self.input.clone() );
+        let result = Some(self.input.clone());
 
-
-        let reset_result = direction.reset( &self.input, &mut self.directions, mobile_position );
+        let reset_result = direction.reset(&self.input, &mut self.directions, mobile_position);
 
         if let Err(SwapError(position)) = reset_result {
             self.result = Err(format!("swap permutation error at position {}", position));
@@ -150,44 +144,34 @@ impl<T> Iterator for PermutationIterator<T>
             return None;
         }
         if let Err(ResetError(position)) = reset_result {
-            self.result = Err(format!( "reset permutation error at position {}", position));
+            self.result = Err(format!("reset permutation error at position {}", position));
             // stop the iterator
             return None;
         }
 
-
-
         self.counter = self.counter + 1;
         result
-
-
     }
 }
-
 
 use std::thread;
 
 pub struct PermutationIteratorThread {}
 
-
-impl PermutationIteratorThread
-{
-     pub fn new<T, F>( input : Vec<T>, callback : F )
-        where 
-            T: 'static + PartialOrd + Ord + Clone + Send,
-            F: 'static + Fn(Vec<T>) + Send
+impl PermutationIteratorThread {
+    pub fn new<T, F>(input: Vec<T>, callback: F)
+    where
+        T: 'static + PartialOrd + Ord + Clone + Send,
+        F: 'static + Fn(Vec<T>) + Send,
     {
-
-        let computer_handler = thread::spawn( move || {
-
+        let computer_handler = thread::spawn(move || {
             let iterator = PermutationIterator::new(input);
 
             for permutation in iterator {
-                callback( permutation );
+                callback(permutation);
             }
-                    
         });
 
         computer_handler.join();
-     }
+    }
 }

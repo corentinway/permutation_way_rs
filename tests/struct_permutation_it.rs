@@ -33,19 +33,145 @@ impl PartialEq for Person {
 fn should_find_6_permutation_given_a_vec_of_3_float_elements_with_iterator() {
     // input
     let input = vec![
-        Person { id: 1, name: String::from( "john" ), height: 160 },
-        Person { id: 1, name: String::from( "marie" ), height: 166 },
-        Person { id: 1, name: String::from( "paul" ), height: 188 }
+        Person {
+            id: 1,
+            name: String::from("john"),
+            height: 160,
+        },
+        Person {
+            id: 1,
+            name: String::from("marie"),
+            height: 166,
+        },
+        Person {
+            id: 1,
+            name: String::from("paul"),
+            height: 188,
+        },
     ];
     // call
-    let mut iterator = PermutationIterator::new( input );
+    let mut iterator = PermutationIterator::new(input);
     // assertions
-    assert_eq!( Some( vec![Person { id: 1, name: String::from( "john" ), height: 160 }, Person { id: 1, name: String::from( "marie" ), height: 166 }, Person { id: 1, name: String::from( "paul" ), height: 188 }] ), iterator.next() );
-    assert_eq!( Some( vec![Person { id: 1, name: String::from( "john" ), height: 160 }, Person { id: 1, name: String::from( "paul" ), height: 188 }, Person { id: 1, name: String::from( "marie" ), height: 166 }] ), iterator.next() );
-    assert_eq!( Some( vec![Person { id: 1, name: String::from( "paul" ), height: 188 }, Person { id: 1, name: String::from( "john" ), height: 160 }, Person { id: 1, name: String::from( "marie" ), height: 166 }] ), iterator.next() );
-    assert_eq!( Some( vec![Person { id: 1, name: String::from( "paul" ), height: 188 }, Person { id: 1, name: String::from( "marie" ), height: 166 }, Person { id: 1, name: String::from( "john" ), height: 160 }] ), iterator.next() );
-    assert_eq!( Some( vec![Person { id: 1, name: String::from( "marie" ), height: 166 }, Person { id: 1, name: String::from( "paul" ), height: 188 }, Person { id: 1, name: String::from( "john" ), height: 160 }] ), iterator.next() );
-    assert_eq!( Some( vec![Person { id: 1, name: String::from( "marie" ), height: 166 }, Person { id: 1, name: String::from( "john" ), height: 160 }, Person { id: 1, name: String::from( "paul" ), height: 188 }] ), iterator.next() );
-    assert_eq!( None, iterator.next() );
-    assert_eq!( false, iterator.has_errors() );
+    assert_eq!(
+        Some(vec![
+            Person {
+                id: 1,
+                name: String::from("john"),
+                height: 160,
+            },
+            Person {
+                id: 1,
+                name: String::from("marie"),
+                height: 166,
+            },
+            Person {
+                id: 1,
+                name: String::from("paul"),
+                height: 188,
+            },
+        ]),
+        iterator.next()
+    );
+    assert_eq!(
+        Some(vec![
+            Person {
+                id: 1,
+                name: String::from("john"),
+                height: 160,
+            },
+            Person {
+                id: 1,
+                name: String::from("paul"),
+                height: 188,
+            },
+            Person {
+                id: 1,
+                name: String::from("marie"),
+                height: 166,
+            },
+        ]),
+        iterator.next()
+    );
+    assert_eq!(
+        Some(vec![
+            Person {
+                id: 1,
+                name: String::from("paul"),
+                height: 188,
+            },
+            Person {
+                id: 1,
+                name: String::from("john"),
+                height: 160,
+            },
+            Person {
+                id: 1,
+                name: String::from("marie"),
+                height: 166,
+            },
+        ]),
+        iterator.next()
+    );
+    assert_eq!(
+        Some(vec![
+            Person {
+                id: 1,
+                name: String::from("paul"),
+                height: 188,
+            },
+            Person {
+                id: 1,
+                name: String::from("marie"),
+                height: 166,
+            },
+            Person {
+                id: 1,
+                name: String::from("john"),
+                height: 160,
+            },
+        ]),
+        iterator.next()
+    );
+    assert_eq!(
+        Some(vec![
+            Person {
+                id: 1,
+                name: String::from("marie"),
+                height: 166,
+            },
+            Person {
+                id: 1,
+                name: String::from("paul"),
+                height: 188,
+            },
+            Person {
+                id: 1,
+                name: String::from("john"),
+                height: 160,
+            },
+        ]),
+        iterator.next()
+    );
+    assert_eq!(
+        Some(vec![
+            Person {
+                id: 1,
+                name: String::from("marie"),
+                height: 166,
+            },
+            Person {
+                id: 1,
+                name: String::from("john"),
+                height: 160,
+            },
+            Person {
+                id: 1,
+                name: String::from("paul"),
+                height: 188,
+            },
+        ]),
+        iterator.next()
+    );
+    assert_eq!(None, iterator.next());
+    assert_eq!(false, iterator.has_errors());
 }
