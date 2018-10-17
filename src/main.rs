@@ -11,33 +11,29 @@ use std::marker::Send;
 fn main() {
 
     let vec_length = get_vec_length();
-
     println!( "Vec length is {}", vec_length );
 
     let input = create_input_vector(vec_length);
-
     println!( "input is {:?}", input );
 
     find_permutations( input, |data| {
-        println!("callback - {:?}", data );
-    }  );
+            println!("callback - {:?}", data )
+    } );
 
-    thread::sleep_ms( 10000 );
 
 }
 
 
 fn find_permutations<F>( input : Vec<i32>, callback : F ) 
-    where F : 'static + Fn(Option<Vec<i32>>) + Send  {
+    where F : 'static + Fn(Vec<i32>) + Send  {
 
     thread::spawn(move || {
        let iter = PermutationIterator::new( input );
 
         for permutation in iter {
-            callback( Some(permutation) );
+            callback( permutation );
         }
 
-        callback( None );
     });
 
 }
