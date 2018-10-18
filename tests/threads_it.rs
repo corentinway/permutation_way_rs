@@ -24,3 +24,17 @@ fn should_be_coded_with_threads() {
 
     // assertions
 }
+#[test]
+fn should_invoke_a_mutable_callback() {
+    let input = vec![1, 2, 3];
+    let mut counter = 0;
+    let receiver = |permutation| {
+        counter = counter + 1;
+    };
+    // call
+    PermutationIteratorThread::iter_mut( input, receiver );
+    thread::sleep(Duration::from_secs(10));
+    // assertions
+    assert_eq!( 6, counter );
+
+}
