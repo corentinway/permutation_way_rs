@@ -1,7 +1,11 @@
 
 
-use mobility::Mobility;
-use mobility::Mobility::*;
+use super::mobility::Mobility;
+use super::mobility::Mobility::Left;
+use super::mobility::Mobility::Right;
+use super::mobility::Mobility::NotMobile;
+
+
 
 /// Largest element found for permutation
 pub struct Largest {
@@ -9,6 +13,7 @@ pub struct Largest {
     pub position : usize
 }
 
+#[warn(unused_imports)]
 pub fn print_permutation<T>( input : &Vec<T>, directions : &Vec<Mobility>)
     where T : ToString + Clone
 {
