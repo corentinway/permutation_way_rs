@@ -178,7 +178,7 @@ impl PermutationIteratorThread {
     pub fn iter_mut<T, F>(input: Vec<T>, callback : F) 
     where
         T: 'static + PartialOrd + Ord + Clone + Send,
-        F: 'static + Box<FnMut(Vec<T>) + Send>,
+        F: 'static + FnMut(Vec<T>) + Send,
     {
         let computer_handler = thread::spawn(move || {
             let iterator = PermutationIterator::new(input);

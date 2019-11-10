@@ -27,7 +27,7 @@ fn should_be_coded_with_threads() {
 #[test]
 fn should_invoke_a_mutable_callback() {
     let input = vec![1, 2, 3];
-    let mut counter = 0;
+    let mut counter = Arc::new(0);
     let receiver = |permutation| {
         counter = counter + 1;
     };
