@@ -1,6 +1,4 @@
 
-extern crate permutation_way;
-
 use permutation_way::PermutationIterator;
 
 use std::time::Instant;
