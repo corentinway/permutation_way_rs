@@ -1,9 +1,9 @@
 
 
-use super::mobility::Mobility;
-use super::mobility::Mobility::Left;
-use super::mobility::Mobility::Right;
-use super::mobility::Mobility::NotMobile;
+use crate::mobility::Mobility;
+use crate::mobility::Mobility::Left;
+use crate::mobility::Mobility::Right;
+use crate::mobility::Mobility::NotMobile;
 
 
 
@@ -14,6 +14,7 @@ pub struct Largest {
 }
 
 #[warn(unused_imports)]
+#[allow(dead_code)]
 pub fn print_permutation<T>( input : &Vec<T>, directions : &Vec<Mobility>)
     where T : ToString + Clone
 {
