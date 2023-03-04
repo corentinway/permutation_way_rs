@@ -1,58 +1,56 @@
-
-
+#![allow(dead_code)]
 use mobility::Mobility;
 use mobility::Mobility::*;
 
 /// Largest element found for permutation
 pub struct Largest {
-    pub direction : Mobility,
-    pub position : usize
+    pub direction: Mobility,
+    pub position: usize,
 }
 
-pub fn print_permutation<T>( input : &Vec<T>, directions : &Vec<Mobility>)
-    where T : ToString + Clone
+pub fn print_permutation<T>(input: &Vec<T>, directions: &Vec<Mobility>)
+where
+    T: ToString + Clone,
 {
     assert_eq!(input.len(), directions.len());
     let mut str = String::new();
 
     for index in 0..input.len() {
-
-        let data : T = input.get( index ).unwrap().clone();
+        let data: T = input.get(index).unwrap().clone();
         let data = data.to_string();
 
         match directions.get(index).unwrap() {
-            &NotMobile => str.push_str( &data),
+            &NotMobile => str.push_str(&data),
             &Left => {
-                str.push_str( "-");
-                str.push_str( &data)
-            },
+                str.push_str("-");
+                str.push_str(&data)
+            }
             &Right => {
-                str.push_str( "+");
-                str.push_str( &data)
-            },
+                str.push_str("+");
+                str.push_str(&data)
+            }
         }
 
-        str.push_str( ", ")
+        str.push_str(", ")
     }
 
-    println!( "permutation {}", str );
-
+    println!("permutation {}", str);
 }
 
-pub fn find_largest_mobile_element<T>(input: &Vec<T>, directions : &Vec<Mobility> ) -> Largest 
-    where T : PartialOrd
+pub fn find_largest_mobile_element<T>(input: &Vec<T>, directions: &Vec<Mobility>) -> Largest
+where
+    T: PartialOrd,
 {
-
     if input.len() == 0 {
         return Largest {
             direction: NotMobile,
-            position: 0
+            position: 0,
         };
     }
 
-    let mut mobile_position : usize = 0;
-    let mut max_value = input.get(mobile_position ).unwrap();
-    let mut max_direction : Mobility = directions.get(mobile_position ).unwrap().clone();
+    let mut mobile_position: usize = 0;
+    let mut max_value = input.get(mobile_position).unwrap();
+    let mut max_direction: Mobility = directions.get(mobile_position).unwrap().clone();
 
     for index in 1..input.len() {
         let is_mobile = directions.get(index).unwrap() != &NotMobile;
@@ -66,7 +64,7 @@ pub fn find_largest_mobile_element<T>(input: &Vec<T>, directions : &Vec<Mobility
         println!("   mobility    {:?}", directions.get(index) );
         */
 
-        if max_direction == NotMobile || ( is_mobile && current_value > max_value ) {
+        if max_direction == NotMobile || (is_mobile && current_value > max_value) {
             max_value = current_value;
             mobile_position = index;
             max_direction = directions.get(index).unwrap().clone();
@@ -78,41 +76,39 @@ pub fn find_largest_mobile_element<T>(input: &Vec<T>, directions : &Vec<Mobility
 
     Largest {
         direction: max_direction,
-        position: mobile_position
+        position: mobile_position,
     }
 }
 
 #[cfg(test)]
 mod tests {
 
-    use mobility::Mobility;
-    use mobility::Mobility::*;
-    use super::Largest;
     use super::find_largest_mobile_element as find;
+    use mobility::Mobility::*;
 
     #[test]
     fn should_find_no_mobile_given_an_empty_input_array() {
         // input
-        let input : Vec<i32> = vec![];
+        let input: Vec<i32> = vec![];
         let directions = vec![];
         // call
         let actual_largest = find(&input, &directions);
         // asserts
-        assert_eq!( NotMobile, actual_largest.direction );
-        assert_eq!( 0, actual_largest.position );
+        assert_eq!(NotMobile, actual_largest.direction);
+        assert_eq!(0, actual_largest.position);
     }
 
     #[test]
-    #[warn(non_snake_case)]
+    #[allow(non_snake_case)]
     fn should_return_NotMobile_given_all_directions_not_mobile() {
         // input
         let input = vec![1, 2, 3];
-        let directions= vec![NotMobile, NotMobile, NotMobile];
+        let directions = vec![NotMobile, NotMobile, NotMobile];
         // call
         let actual_largest = find(&input, &directions);
         // asserts
-        assert_eq!( NotMobile, actual_largest.direction );
-        assert_eq!( 2, actual_largest.position );
+        assert_eq!(NotMobile, actual_largest.direction);
+        assert_eq!(2, actual_largest.position);
     }
 
     #[test]
@@ -120,12 +116,12 @@ mod tests {
     fn should_return_the_largest_mobile_eleemnt() {
         // input
         let input = vec![1, 2, 3];
-        let directions= vec![NotMobile, Left, Left];
+        let directions = vec![NotMobile, Left, Left];
         // call
         let actual_largest = find(&input, &directions);
         // asserts
         // asserts
-        assert_eq!( Left, actual_largest.direction );
-        assert_eq!( 2, actual_largest.position );
+        assert_eq!(Left, actual_largest.direction);
+        assert_eq!(2, actual_largest.position);
     }
 }
