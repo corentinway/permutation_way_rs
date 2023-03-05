@@ -17,8 +17,6 @@ pub enum MobilityError {
     ResetError(usize),
 }
 
-use Mobility::*;
-
 impl Mobility {
     pub fn swap<T>(
         &self,
@@ -27,21 +25,21 @@ impl Mobility {
         mobile_position: usize,
     ) -> Result<(), MobilityError> {
         match *self {
-            Left => {
+            Mobility::Left => {
                 if mobile_position == 0 {
                     return Err(MobilityError::SwapError(0));
                 }
                 input.swap(mobile_position - 1, mobile_position);
                 directions.swap(mobile_position - 1, mobile_position)
             }
-            Right => {
+            Mobility::Right => {
                 if mobile_position == input.len() - 1 {
                     return Err(MobilityError::SwapError(mobile_position));
                 }
                 input.swap(mobile_position, mobile_position + 1);
                 directions.swap(mobile_position, mobile_position + 1)
             }
-            NotMobile => (),
+            Mobility::NotMobile => (),
         }
 
         Ok(())
@@ -66,7 +64,7 @@ impl Mobility {
             self.get_next_element( &input, position_after_swap)? > input.get(position_after_swap )
         {
             if let Some(element) = directions.get_mut(position_after_swap) {
-                *element = NotMobile;
+                *element = Mobility::NotMobile;
             }
         }
 
@@ -78,14 +76,14 @@ impl Mobility {
         for index in 0..position_after_swap {
             if input.get(index) > input.get(position_after_swap) {
                 if let Some(element) = directions.get_mut(index) {
-                    *element = Right;
+                    *element = Mobility::Right;
                 }
             }
         }
         for index in position_after_swap + 1..input.len() {
             if input.get(index) > input.get(position_after_swap) {
                 if let Some(element) = directions.get_mut(index) {
-                    *element = Left;
+                    *element = Mobility::Left;
                 }
             }
         }
@@ -102,17 +100,17 @@ impl Mobility {
         T: PartialOrd,
     {
         match *self {
-            Left => Ok(input.get(position_after_swap - 1)),
-            Right => Ok(input.get(position_after_swap + 1)),
-            NotMobile => Err(MobilityError::ResetError(position_after_swap)),
+            Mobility::Left => Ok(input.get(position_after_swap - 1)),
+            Mobility::Right => Ok(input.get(position_after_swap + 1)),
+            Mobility::NotMobile => Err(MobilityError::ResetError(position_after_swap)),
         }
     }
 
     fn get_position_after_swap(&self, mobile_position: usize) -> Result<usize, MobilityError> {
         match *self {
-            Left => Ok(mobile_position - 1),
-            Right => Ok(mobile_position + 1),
-            NotMobile => Err(MobilityError::SwapError(mobile_position)),
+            Mobility::Left => Ok(mobile_position - 1),
+            Mobility::Right => Ok(mobile_position + 1),
+            Mobility::NotMobile => Err(MobilityError::SwapError(mobile_position)),
         }
     }
 }
@@ -123,9 +121,9 @@ pub fn create_directions<T>(input: &Vec<T>) -> Vec<Mobility> {
     }
 
     // all input elements are mobile leftward
-    let mut directions: Vec<Mobility> = input.iter().map(|_| Left).collect();
+    let mut directions: Vec<Mobility> = input.iter().map(|_| Mobility::Left).collect();
     // the first one is not mobile
-    directions[0] = NotMobile;
+    directions[0] = Mobility::NotMobile;
 
     directions
 }

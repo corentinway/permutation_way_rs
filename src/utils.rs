@@ -1,6 +1,6 @@
 #![allow(dead_code)]
-use mobility::Mobility;
-use mobility::Mobility::*;
+use crate::mobility::Mobility;
+use crate::mobility::Mobility::*;
 
 /// Largest element found for permutation
 pub struct Largest {
@@ -84,7 +84,7 @@ where
 mod tests {
 
     use super::find_largest_mobile_element as find;
-    use mobility::Mobility::*;
+    use crate::mobility::Mobility::*;
 
     #[test]
     fn should_find_no_mobile_given_an_empty_input_array() {

@@ -2,7 +2,7 @@ extern crate permutation_way;
 
 #[cfg(test)]
 mod tests {
-    use permutation_way::PermutationIterator;
+    use permutation_way::compute_permutation;
     use std::cmp::Ordering;
 
     #[derive(Eq, Clone, Debug)]
@@ -51,7 +51,7 @@ mod tests {
             },
         ];
         // call
-        let mut iterator = PermutationIterator::new(input);
+        let mut iterator = compute_permutation(input);
         // assertions
         assert_eq!(
             Some(vec![

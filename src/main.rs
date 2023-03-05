@@ -1,6 +1,6 @@
 extern crate permutation_way;
 
-use permutation_way::PermutationIterator;
+use permutation_way::compute_permutation;
 
 use std::time::Instant;
 
@@ -27,7 +27,7 @@ fn main() {
     let start = Instant::now();
 
     // call
-    let iterator = PermutationIterator::new(input);
+    let iterator = compute_permutation(input);
 
     let permutation_found_counter = iterator.count();
 

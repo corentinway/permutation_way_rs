@@ -2,5 +2,6 @@
 name = "permutation_way"
 version = "0.1.0"
 authors = ["Corentin <corentinway@gmail.com>"]
+edition = "2021"
 
 [dependencies]
