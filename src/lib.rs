@@ -13,3 +13,15 @@ where
 {
     PermutationIterator::new(input)
 }
+pub fn compute_permutation_indexes<T>(input: &Vec<T>) -> PermutationIterator<usize>
+where
+    T: PartialOrd + Ord + Clone,
+{
+    let indexes = input
+        .iter()
+        .enumerate()
+        .map(|(i, _val)| i)
+        .collect::<Vec<_>>();
+
+    PermutationIterator::new(indexes)
+}
