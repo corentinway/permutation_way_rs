@@ -5,6 +5,8 @@ mod mobility;
 mod permutation_iterator;
 mod utils;
 
+use std::borrow::BorrowMut;
+
 use permutation_iterator::PermutationIterator;
 
 pub fn compute_permutation<T>(input: Vec<T>) -> PermutationIterator<T>
@@ -24,4 +26,23 @@ where
         .collect::<Vec<_>>();
 
     PermutationIterator::new(indexes)
+}
+
+pub fn compute_mutable_permutation<T>(input: &Vec<T>) 
+
+{
+    let indexes = input
+        .iter()
+        .enumerate()
+        .map(|(i, _val)| i)
+        .collect::<Vec<_>>();
+
+    let borrowed_input = input.borrow_mut();
+
+    let mut output : Vec<&T> = Vec::with_capacity(input.capacity());
+
+    for i in indexes {
+        output.insert(i, borrowed_input.get(i).expect("Value is present"));
+    }
+    
 }
